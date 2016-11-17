@@ -1,0 +1,8 @@
+version: "2"
+services:
+  back-end:
+    image: u2668/node-js-sceleton
+  web-presentation:
+    image: u2668/web-presentation
+    ports:
+      - "80:80"

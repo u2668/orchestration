@@ -6,3 +6,10 @@ services:
     image: u2668/web-presentation
     ports:
       - "80:80"
+  chat-bot:
+    image: u2668/chat-bot
+  ngrok:
+    image: wernight/ngrok
+    ports:
+      - "4040:4040"
+    command: ngrok http chat-bot:8080

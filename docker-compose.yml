@@ -5,7 +5,7 @@ services:
     ports:
     - "514:514"
     - "514:514/udp"
-    - "5601:5601" 
+    - "5601:5601"
   chatbot:
     image: u2668/chat-bot:with-gears
     logging:
@@ -13,6 +13,10 @@ services:
       options:
         tag: "chatbot"
         syslog-address: "tcp://localhost:514"
+    depends_on:
+      - logger
+      - ngrok
+      - backend
   ngrok:
     image: wernight/ngrok
     command: ngrok http -authtoken=3rx8CruDuurgPPfCmBz4w_4y17idRpwYodKBmQJ5JkC -subdomain=gotocanteenbot -log stdout chatbot:8080
@@ -21,6 +25,8 @@ services:
       options:
         tag: "chatbot"
         syslog-address: "tcp://localhost:514"
+    depends_on:
+      - logger 
   backend:
     image: "u2668/node-js-backend"
     logging:
@@ -31,6 +37,9 @@ services:
     environment:
       - CHAT_BOT_ENDPOINT=http://chatbot:8080/notifications
       - MONGO=mongodb://mongodb:27017/
+    depends_on:
+      - logger
+      - mongodb
   mongodb:
     image: mongo
     logging:
@@ -38,3 +47,5 @@ services:
       options:
         tag: "mongo"
         syslog-address: "tcp://localhost:514"
+    depends_on:
+      - logger

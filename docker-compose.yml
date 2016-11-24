@@ -6,8 +6,17 @@ services:
     - "514:514"
     - "514:514/udp"
     - "5601:5601"
+  brain:
+    image: u2668/chat-bot-brain
+    logging:
+      driver: syslog
+      options:
+        tag: "brain"
+        syslog-address: "tcp://localhost:514"
+    depends_on:
+      - logger    
   chatbot:
-    image: u2668/chat-bot:with-gears
+    image: u2668/chat-bot:with-brain
     logging:
       driver: syslog
       options:
@@ -17,6 +26,7 @@ services:
       - logger
       - ngrok
       - backend
+      - brain   
   ngrok:
     image: wernight/ngrok
     command: ngrok http -authtoken=3rx8CruDuurgPPfCmBz4w_4y17idRpwYodKBmQJ5JkC -subdomain=gotocanteenbot -log stdout chatbot:8080

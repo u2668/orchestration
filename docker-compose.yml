@@ -1,14 +1,40 @@
 version: "2"
 services:
+  logger:
+    image: pschiffe/rsyslog-elasticsearch-kibana
+    ports:
+    - "514:514"
+    - "514:514/udp"
+    - "5601:5601" 
   chatbot:
     image: u2668/chat-bot:with-gears
+    logging:
+      driver: syslog
+      options:
+        tag: "chatbot"
+        syslog-address: "tcp://localhost:514"
   ngrok:
     image: wernight/ngrok
     command: ngrok http -authtoken=3rx8CruDuurgPPfCmBz4w_4y17idRpwYodKBmQJ5JkC -subdomain=gotocanteenbot -log stdout chatbot:8080
+    logging:
+      driver: syslog
+      options:
+        tag: "chatbot"
+        syslog-address: "tcp://localhost:514"
   backend:
     image: "u2668/node-js-backend"
+    logging:
+      driver: syslog
+      options:
+        tag: "backend"
+        syslog-address: "tcp://localhost:514"
     environment:
       - CHAT_BOT_ENDPOINT=http://chatbot:8080/notifications
-      - MONGO=mongodb://mongo:27017/
-  mongo:
+      - MONGO=mongodb://mongodb:27017/
+  mongodb:
     image: mongo
+    logging:
+      driver: syslog
+      options:
+        tag: "mongo"
+        syslog-address: "tcp://localhost:514"

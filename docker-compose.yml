@@ -1,15 +1,14 @@
 version: "2"
 services:
-  back-end:
-    image: u2668/node-js-sceleton
-  web-presentation:
-    image: u2668/web-presentation
-    ports:
-      - "80:80"
-  chat-bot:
-    image: u2668/chat-bot
+  chatbot:
+    image: u2668/chat-bot:with-gears
   ngrok:
     image: wernight/ngrok
-    ports:
-      - "4040:4040"
-    command: ngrok http chat-bot:8080
+    command: ngrok http -authtoken=3rx8CruDuurgPPfCmBz4w_4y17idRpwYodKBmQJ5JkC -subdomain=gotocanteenbot -log stdout chatbot:8080
+  backend:
+    image: "u2668/node-js-backend"
+    environment:
+      - CHAT_BOT_ENDPOINT=http://chatbot:8080/notifications
+      - MONGO=mongodb://mongo:27017/
+  mongo:
+    image: mongo

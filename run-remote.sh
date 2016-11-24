@@ -11,6 +11,10 @@ scp -r ./docker-compose.yml \
 ssh root@${deployAddress} docker-compose -f \
   /opt/gotocanteen/docker-compose.yml stop
 
+#pull images
+ssh root@${deployAddress} docker-compose -f \
+  /opt/gotocanteen/docker-compose.yml pull
+
 #run new
 ssh root@${deployAddress} docker-compose -f \
   /opt/gotocanteen/docker-compose.yml up -d

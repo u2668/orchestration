@@ -1,6 +1,6 @@
 #!/bin/sh
 
-deployAddress="138.68.71.0"
+deployAddress="46.101.187.150"
 
 #copy scenario
 ssh root@${deployAddress} mkdir /opt/gotocanteen

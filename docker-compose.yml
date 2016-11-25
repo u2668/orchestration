@@ -6,6 +6,17 @@ services:
     - "514:514"
     - "514:514/udp"
     - "5601:5601"
+  web:   
+    image: u2668/web-presentation
+    ports:
+      - "80:80"
+    logging:
+      driver: syslog
+      options:
+        tag: "brain"
+        syslog-address: "tcp://localhost:514"
+    depends_on:
+      - logger     
   brain:
     image: u2668/chat-bot-brain
     logging:

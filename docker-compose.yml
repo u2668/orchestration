@@ -13,7 +13,7 @@ services:
     logging:
       driver: syslog
       options:
-        tag: "brain"
+        tag: "web"
         syslog-address: "tcp://localhost:514"
     depends_on:
       - logger     
